@@ -33,9 +33,7 @@ cpp-tensorlib
     - ts::Tensor t3 = ts::cat({t1, t2}, int dim); // This joins t1 and t2 along the given dimension.
     - ts::Tensor t4 = ts::tile(t1, int dims[]); // This construct t4 by repeating the elements of t1
 
-    - ts::Tensor t = ts::tensor(T data[]);
-    - t(1) = 1; // This sets the second element of t to 1.
-    - t(2,{2,4}) = [1,2]; // This sets the third to fifth (excluded) elements of the third dimension of t to [1,2].
+    - ts::Tensor t = ts::tensor(T data[]); // t(1) = 1; // This sets the second element of t to 1. // t(2,{2,4}) = [1,2]; // This sets the third to fifth (excluded) elements of the third dimension of t to [1,2].
 
     - ts::Tensor t = ts::tensor(T data[]);
     - ts::Tensor t1 = ts::transpose(t, int dim1, int dim2); // This transposes the tensor t along the given dimensions.
@@ -44,8 +42,7 @@ cpp-tensorlib
     - ts::Tensor t4 = t.permute(int dims[]); // Another way to permute the tensor t.
 
     - ts::Tensor t = ts::tensor(T data[]);
-    - ts::Tensor t3 = ts::view(t, int shape[]); // This views the tensor t according to 
-    - the given shape.
+    - ts::Tensor t3 = ts::view(t, int shape[]); // This views the tensor t according to the given shape.
     - ts::Tensor t4 = t.view(int shape[]); // Another way to view the tensor t.
 
 - 3
@@ -80,7 +77,7 @@ cpp-tensorlib
     - ts::Tensor t = ts::tensor(T data[]);
     - ts::save(t, string filename); // This saves the tensor t to the given file.
     - ts::Tensor t1 = ts::load(string filename); // This loads the tensor t from the given file.
-    - std::cout << t << std::endl; // This should pretty-print the tensor t
+    
 
 - 加速
 - 梯度
