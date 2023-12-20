@@ -4,7 +4,7 @@ using namespace std;
 namespace ts
 {
 
-    Tensor::Tensor() : shape_{}, dtype_{}, data_{nullptr} {}
+    Tensor::Tensor() : shape{}, dtype_{}, data_{nullptr} {}
 
     Tensor::Tensor(const vector<vector<double>> &data)
     {
@@ -18,7 +18,7 @@ namespace ts
 
     vector<size_t> Tensor::size() const
     {
-        return shape_;
+        return shape;
     }
 
     string Tensor::type() const
