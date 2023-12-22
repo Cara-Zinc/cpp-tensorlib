@@ -3,17 +3,60 @@
 
 using namespace std;
 
-int main() {
-    // Test constructor
-    ts::Tensor t = ts::Tensor({{0.1, 1.2}, {2.2, 3.1}, {4.9, 5.2}});
-    cout << t << endl;
+void testConstructor();
+int main()
+{
+    // ts::Tensor t = ts::Tensor({{0.1, 1.2}, {2.2, 3.1}, {4.9, 5.2}});
+    // cout << t << endl;
 
-    ts::Tensor t1 = t(1);
-    cout << "Indexed Tensor (2nd element):\n" << t1 << endl;
+    // ts::Tensor t1 = t(1);
+    // cout << "Indexed Tensor (2nd element):\n" << t1 << endl;
 
-    ts::Tensor t2 = t(2, {2, 1});
-    cout << "Sliced Tensor (3rd to 4th elements in the 3rd dimension):\n" << t2 << endl;
-
-
+    // ts::Tensor t2 = t(2, {2, 1});
+    // cout << "Sliced Tensor (3rd to 4th elements in the 3rd dimension):\n" << t2 << endl;
+    testConstructor();
     return 0;
+}
+
+void testConstructor()
+{
+    // Test 1: Using the data constructor
+    cout << "Test 1: Data Constructor" << endl;
+    vector<vector<double>> data = {{1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}};
+    ts::Tensor tensor1(data);
+
+    cout << "Tensor 1 size: ";
+    for (auto s : tensor1.size())
+        cout << s << " ";
+    cout << "\nTensor 1 data type: " << tensor1.type() << endl;
+    cout << "Tensor 1 data: ";
+    for (size_t i = 0; i < tensor1.size()[0]; ++i)
+    {
+        for (size_t j = 0; j < tensor1.size()[1]; ++j)
+        {
+            cout << tensor1.data_ptr()[i * tensor1.size()[1] + j] << " ";
+        }
+    }
+    cout << "\n\n";
+
+    // Test 2: Using the shape-type constructor
+    cout << "Test 2: Shape-Type Constructor" << endl;
+    vector<size_t> shape = {2, 3};
+    string dtype = "double";
+    double init_value = 0.5;
+    ts::Tensor tensor2(shape, dtype, init_value);
+
+    cout << "Tensor 2 size: ";
+    for (auto s : tensor2.size())
+        cout << s << " ";
+    cout << "\nTensor 2 data type: " << tensor2.type() << endl;
+    cout << "Tensor 2 data: ";
+    for (size_t i = 0; i < tensor2.size()[0]; ++i)
+    {
+        for (size_t j = 0; j < tensor2.size()[1]; ++j)
+        {
+            cout << tensor2.data_ptr()[i * tensor2.size()[1] + j] << " ";
+        }
+    }
+    cout << endl;
 }

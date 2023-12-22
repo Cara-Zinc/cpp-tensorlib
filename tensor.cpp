@@ -8,12 +8,47 @@ namespace ts
 
     Tensor::Tensor(const vector<vector<double>> &data)
     {
-        // Implement constructor
+        if (!data.empty() && !data[0].empty())
+        {
+            dimenison = 2; // assuming 2D data
+            shape = {data.size(), data[0].size()};
+            stride = {shape[1], 1};
+            dtype_ = "double"; // set the data type
+            data_ = new double[shape[0] * shape[1]];
+            for (size_t i = 0; i < shape[0]; ++i)
+            {
+                for (size_t j = 0; j < shape[1]; ++j)
+                {
+                    data_[i * stride[0] + j] = data[i][j];
+                }
+            }
+        }
+        else
+        {
+            throw std::invalid_argument("Tensor data cannot be empty.");
+        }
     }
 
-    Tensor::Tensor(const vector<size_t> &shape, const string &dtype, double init_value)
+    Tensor::Tensor(const vector<size_t> &shape, const string &dtype, double init_value): shape(shape), dtype_(dtype)
     {
-        // Implement constructor
+        if (!shape.empty())
+        {
+            dimenison = shape.size();
+            size_t total_size = 1;
+            stride.resize(dimenison);
+            for (int i = dimenison - 1; i >= 0; --i)
+            {
+                stride[i] = (i == dimenison - 1) ? 1 : stride[i + 1] * shape[i + 1];
+                total_size *= shape[i];
+            }
+
+            data_ = new double[total_size];
+            std::fill_n(data_, total_size, init_value);
+        }
+        else
+        {
+             throw std::invalid_argument("Tensor shape cannot be empty.");
+        }
     }
 
     vector<size_t> Tensor::size() const
@@ -30,7 +65,5 @@ namespace ts
     {
         return data_;
     }
-
-    
 
 }
