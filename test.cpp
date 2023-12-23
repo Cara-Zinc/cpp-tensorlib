@@ -58,5 +58,26 @@ void testConstructor()
             cout << tensor2.data_ptr()[i * tensor2.size()[1] + j] << " ";
         }
     }
-    cout << endl;
+    cout << "\n\n";
+
+    // Test 3: Using the third constructor with data_vector
+    cout << "Test: Third Constructor" << endl;
+    vector<double> data_vector = {1.2, 3.4, 5.6, 7.8, 9.0, 10.1};
+
+    try {
+        ts::Tensor tensor(shape, dtype, data_vector);
+
+        cout << "Tensor size: ";
+        for (auto s : tensor.size()) cout << s << " ";
+        cout << "\nTensor data type: " << tensor.type() << endl;
+        cout << "Tensor data: ";
+        for (size_t i = 0; i < tensor.size()[0]; ++i) {
+            for (size_t j = 0; j < tensor.size()[1]; ++j) {
+                cout << tensor.data_ptr()[i * tensor.size()[1] + j] << " ";
+            }
+        }
+        cout << endl;
+    } catch (const std::exception& e) {
+        cout << "Exception occurred: " << e.what() << endl;
+    }
 }
