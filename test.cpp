@@ -4,6 +4,8 @@
 using namespace std;
 
 void testConstructor();
+void testMath();
+void printTensor(const ts::Tensor& t);
 int main()
 {
     // ts::Tensor t = ts::Tensor({{0.1, 1.2}, {2.2, 3.1}, {4.9, 5.2}});
@@ -14,7 +16,8 @@ int main()
 
     // ts::Tensor t2 = t(2, {2, 1});
     // cout << "Sliced Tensor (3rd to 4th elements in the 3rd dimension):\n" << t2 << endl;
-    testConstructor();
+//    testConstructor();
+    testMath();
     return 0;
 }
 
@@ -80,4 +83,53 @@ void testConstructor()
     } catch (const std::exception& e) {
         cout << "Exception occurred: " << e.what() << endl;
     }
+}
+
+void testMath(){
+    // 创建测试用的 Tensor 对象
+    ts::Tensor t1({2, 3}, "double", 1.0); // 创建一个 2x3 的 Tensor，初始化为 1.0
+    ts::Tensor t2({2, 3}, "double", 2.0); // 创建另一个 2x3 的 Tensor，初始化为 2.0
+
+    // 使用非成员函数进行加法
+    ts::Tensor t3 = ts::add(t1, t2);
+    std::cout << "Tensor t1 + t2 is: ";
+    printTensor(t3);
+
+    // 使用成员函数和标量进行加法
+    ts::Tensor t4 = t1.add(5.0);
+    std::cout << "Tensor t1 + 5.0 is: ";
+    printTensor(t4);
+
+    // 使用运算符重载进行加法
+    ts::Tensor t5 = t1 + t2;
+    std::cout << "Tensor t1 + t2 (operator+) is: ";
+    printTensor(t5);
+
+    //t6 t7 t8为减法测试
+    ts::Tensor t6 = ts::sub(t1, t2);
+    std::cout << "Tensor t1 - t2 is: ";
+    printTensor(t6);
+
+    ts::Tensor t7 = t1.sub(5.0);
+    std::cout << "Tensor t1 - 5.0 is: ";
+    printTensor(t7);
+
+    ts::Tensor t8 = t1 - t2;
+    std::cout << "Tensor t1 - t2 (operator+) is: ";
+    printTensor(t8);
+
+    
+
+}
+
+void printTensor(const ts::Tensor& t) {
+    size_t total_size = 1;
+    for (auto dim : t.size()) {
+        total_size *= dim;
+    }
+    double* data = t.data_ptr();
+    for (size_t i = 0; i < total_size; ++i) {
+        std::cout << data[i] << " ";
+    }
+    std::cout << std::endl;
 }

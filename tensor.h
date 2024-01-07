@@ -27,10 +27,17 @@ namespace ts
         Tensor operator()(size_t index) const;                                         // Indexing
         Tensor operator()(size_t start, const std::vector<size_t> &slice_shape) const; // Slicing
 
+        Tensor add(const Tensor& other) const;
+        Tensor add(double value) const;
+        Tensor sub(const Tensor& other) const;
+        Tensor sub(double value) const;
+
+        friend Tensor operator+(const Tensor& a, const Tensor& b);
+        friend Tensor operator-(const Tensor& a, const Tensor& b);
         // Other member functions for tensor operations, indexing, slicing, etc.
     private:
         double *data_;
-        int dimenison; // the number of dimensions this tensor has
+        int dimension; // the number of dimensions this tensor has
         std::vector<size_t> shape; // shape of the tensor, storing the length of every dimension of the tensor
         std::string dtype_;
         std::vector<size_t> offset; // the shift between the start of the tensor to tensor->data
@@ -38,8 +45,12 @@ namespace ts
         // following is an example:
         // if the shape of a tensor is { 2 , 3 , 4 }, then the stride of a tensor is { 12 , 4 , 1 }, that is { 3*4*1 , 4*1 , 1 }
         // the ith value in the stride vector actually stores the multiplicant of all the dimension lengths that stay behind it
-        // In this way, we can store a multi-dimenison tensor in an array and use stride to help us managing the tensor
+        // In this way, we can store a multi-dimension tensor in an array and use stride to help us managing the tensor
     };
 
     // Other utility functions or global operator overloads
+    Tensor add(const Tensor& a, const Tensor& b);
+    Tensor add(const Tensor& a, double value);
+    Tensor sub(const Tensor& a, const Tensor& b);
+    Tensor sub(const Tensor& a, double value);
 }

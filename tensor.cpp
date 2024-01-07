@@ -10,7 +10,7 @@ namespace ts
     {
         if (!data.empty() && !data[0].empty())
         {
-            dimenison = 2; // assuming 2D data
+            dimension = 2; // assuming 2D data
             shape = {data.size(), data[0].size()};
             stride = {shape[1], 1};
             dtype_ = "double"; // set the data type
@@ -33,12 +33,12 @@ namespace ts
     {
         if (!shape.empty())
         {
-            dimenison = shape.size();
+            dimension = shape.size();
             size_t total_size = 1;
-            stride.resize(dimenison);
-            for (int i = dimenison - 1; i >= 0; --i)
+            stride.resize(dimension);
+            for (int i = dimension - 1; i >= 0; --i)
             {
-                stride[i] = (i == dimenison - 1) ? 1 : stride[i + 1] * shape[i + 1];
+                stride[i] = (i == dimension - 1) ? 1 : stride[i + 1] * shape[i + 1];
                 total_size *= shape[i];
             }
 
@@ -59,12 +59,12 @@ namespace ts
             throw std::invalid_argument("Tensor shape cannot be empty.");
         }
 
-        dimenison = shape.size();
+        dimension = shape.size();
         size_t total_size = 1;
-        stride.resize(dimenison);
-        for (int i = dimenison - 1; i >= 0; --i)
+        stride.resize(dimension);
+        for (int i = dimension - 1; i >= 0; --i)
         {
-            stride[i] = (i == dimenison - 1) ? 1 : stride[i + 1] * shape[i + 1];
+            stride[i] = (i == dimension - 1) ? 1 : stride[i + 1] * shape[i + 1];
             total_size *= shape[i];
         }
 
