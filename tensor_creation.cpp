@@ -21,7 +21,7 @@ namespace ts {
             data[i] = distribution(generator);
         }
 
-        return Tensor(shape, "double", data.data());
+        return Tensor(shape, "double", data);
     }
 
     // Zero Tensor Creation
@@ -30,7 +30,7 @@ namespace ts {
         size_t total = totalSize(shape);
         std::vector<double> data(total, 0.0);
 
-        return Tensor(shape, "double", data.data());
+        return Tensor(shape, "double", data);
     }
 
     // One Tensor Creation
@@ -39,7 +39,7 @@ namespace ts {
         size_t total = totalSize(shape);
         std::vector<double> data(total, 1.0);
 
-        return Tensor(shape, "double", data.data());
+        return Tensor(shape, "double", data);
     }
 
     // Full Tensor Creation
@@ -48,7 +48,7 @@ namespace ts {
         size_t total = totalSize(shape);
         std::vector<double> data(total, static_cast<double>(value));
 
-        return Tensor(shape, "double", data.data());
+        return Tensor(shape, "double", data);
     }
 
     // Identity Matrix Creation
@@ -65,7 +65,7 @@ namespace ts {
             data[i * shape[0] + i] = 1.0;
         }
 
-        return Tensor(shape, "double", data.data());
+        return Tensor(shape, "double", data);
     }
 
     
