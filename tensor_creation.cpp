@@ -22,7 +22,6 @@ namespace ts {
         }
 
         return Tensor(shape, "double", data);
-        return Tensor(shape, "double", data);
     }
 
     // Zero Tensor Creation
@@ -49,7 +48,6 @@ namespace ts {
         size_t total = totalSize(shape);
         std::vector<double> data(total, static_cast<double>(value));
 
-        return Tensor(shape, "double", data);
         return Tensor(shape, "double", data);
     }
 

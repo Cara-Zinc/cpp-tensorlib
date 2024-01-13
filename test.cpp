@@ -88,8 +88,6 @@ void testConstructor()
     }
 }
 
-
-
 void testOperation()
 {
 
@@ -98,6 +96,7 @@ void testOperation()
     vector<size_t> shape = {2, 3, 4};
     string dtype = "double";
     std::vector<double> a(24);
+    
     for (int i = 0; i < 24; ++i) {
         a[i] = i+1;
     }
@@ -110,15 +109,22 @@ void testOperation()
     ts::Tensor t1(shape1, dtype, b);
     ts::Tensor t_index = t(1, 2);
     ts::Tensor t_slicing = t(vector{0, 1}, 0, vector{1, 3});
+    
     ts::Tensor t_cat = cat(vector{t, t1}, 1);
+
     ts::Tensor t_tile = tile(t, vector{1, 2, 3});
+    
     t(0) = 1;
     t(0, vector{0, 2}, 0) = vector{3.0, 2.0};
+    //here comes the problem line 120 throws an error
     ts::Tensor t_tra1 = transpose(t, 0, 2);
+    
     ts::Tensor t_tra2 = t.transpose(0, 2);
+    
     ts::Tensor t_per1 = permute(t, {2, 0, 1});
     ts::Tensor t_per2 = t.permute({2, 0, 1});
     ts::Tensor t_view1 = view(t, {2, 0, 1});
+    
     ts::Tensor t_view2 = t.view({2, 0, 1});
 
     cout << "Tensor t size: ";

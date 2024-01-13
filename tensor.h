@@ -1,4 +1,4 @@
-#pragma once
+//#pragma once
 
 #include <iostream>
 #include <vector>
@@ -21,14 +21,12 @@ namespace ts
         Tensor(const std::vector<std::vector<double>> &data);
         Tensor(const std::vector<size_t> &shape, const std::string &dtype, double init_value = 0.0);
         Tensor(const std::vector<size_t> &shape, const std::string &dtype, std::vector<double>);
-        Tensor(const std::vector<size_t> &shape, const std::string &dtype, std::vector<double>);
 
         std::vector<size_t> size() const;
         std::vector<size_t> get_stride() const;
         std::string type() const;
         double *data_ptr() const;
         std::vector<double*>  data_pos;//for mutating
-
 
 
         //slicing
