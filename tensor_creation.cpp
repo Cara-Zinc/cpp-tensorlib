@@ -22,6 +22,7 @@ namespace ts {
         }
 
         return Tensor(shape, "double", data);
+        return Tensor(shape, "double", data);
     }
 
     // Zero Tensor Creation
@@ -49,6 +50,7 @@ namespace ts {
         std::vector<double> data(total, static_cast<double>(value));
 
         return Tensor(shape, "double", data);
+        return Tensor(shape, "double", data);
     }
 
     // Identity Matrix Creation
@@ -57,7 +59,7 @@ namespace ts {
         if (shape.size() != 2 || shape[0] != shape[1]) {
             throw std::invalid_argument("Identity matrix must be square.");
         }
-
+        
         size_t total = totalSize(shape);
         std::vector<double> data(total, 0.0);
 

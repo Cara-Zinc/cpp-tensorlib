@@ -21,6 +21,7 @@ namespace ts
         Tensor(const std::vector<std::vector<double>> &data);
         Tensor(const std::vector<size_t> &shape, const std::string &dtype, double init_value = 0.0);
         Tensor(const std::vector<size_t> &shape, const std::string &dtype, std::vector<double>);
+        Tensor(const std::vector<size_t> &shape, const std::string &dtype, std::vector<double>);
 
         std::vector<size_t> size() const;
         std::vector<size_t> get_stride() const;
@@ -210,10 +211,17 @@ namespace ts
             std::vector<double> a(data_, data_ + shape[0]*stride[0]);
             return Tensor(shape, dtype_, a);
         }
+        Tensor add(const Tensor& other) const;
+        Tensor add(double value) const;
+        Tensor sub(const Tensor& other) const;
+        Tensor sub(double value) const;
+
+        friend Tensor operator+(const Tensor& a, const Tensor& b);
+        friend Tensor operator-(const Tensor& a, const Tensor& b);
         // Other member functions for tensor operations, indexing, slicing, etc.
     private:
         double *data_;
-        int dimenison; // the number of dimensions this tensor has
+        int dimension; // the number of dimensions this tensor has
         std::vector<size_t> shape; // shape of the tensor, storing the length of every dimension of the tensor
         std::string dtype_;
         std::vector<size_t> offset; // the shift between the start of the tensor to tensor->data
@@ -221,7 +229,7 @@ namespace ts
         // following is an example:
         // if the shape of a tensor is { 2 , 3 , 4 }, then the stride of a tensor is { 12 , 4 , 1 }, that is { 3*4*1 , 4*1 , 1 }
         // the ith value in the stride vector actually stores the multiplicant of all the dimension lengths that stay behind it
-        // In this way, we can store a multi-dimenison tensor in an array and use stride to help us managing the tensor
+        // In this way, we can store a multi-dimension tensor in an array and use stride to help us managing the tensor
 
     };
 
@@ -231,5 +239,9 @@ namespace ts
     Tensor transpose(Tensor tensor, int dim1, int dim2);
     Tensor permute(Tensor tensor, std::vector<int> dims);
     Tensor view(Tensor tensor, std::vector<size_t> shape);
+    Tensor add(const Tensor& a, const Tensor& b);
+    Tensor add(const Tensor& a, double value);
+    Tensor sub(const Tensor& a, const Tensor& b);
+    Tensor sub(const Tensor& a, double value);
 }
 

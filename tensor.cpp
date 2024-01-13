@@ -10,7 +10,7 @@ namespace ts
     {
         if (!data.empty() && !data[0].empty())
         {
-            dimenison = 2; // assuming 2D data
+            dimension = 2; // assuming 2D data
             shape = {data.size(), data[0].size()};
             stride = {shape[1], 1};
             dtype_ = "double"; // set the data type
@@ -33,12 +33,12 @@ namespace ts
     {
         if (!shape.empty())
         {
-            dimenison = shape.size();
+            dimension = shape.size();
             size_t total_size = 1;
-            stride.resize(dimenison);
-            for (int i = dimenison - 1; i >= 0; --i)
+            stride.resize(dimension);
+            for (int i = dimension - 1; i >= 0; --i)
             {
-                stride[i] = (i == dimenison - 1) ? 1 : stride[i + 1] * shape[i + 1];
+                stride[i] = (i == dimension - 1) ? 1 : stride[i + 1] * shape[i + 1];
                 total_size *= shape[i];
             }
 
@@ -49,6 +49,32 @@ namespace ts
         {
             throw std::invalid_argument("Tensor shape cannot be empty.");
         }
+    }
+    
+    Tensor::Tensor(const vector<size_t> &shape, const string &dtype, vector<double> data_vector)
+        : shape(shape), dtype_(dtype)
+    {
+        if (shape.empty())
+        {
+            throw std::invalid_argument("Tensor shape cannot be empty.");
+        }
+
+        dimension = shape.size();
+        size_t total_size = 1;
+        stride.resize(dimension);
+        for (int i = dimension - 1; i >= 0; --i)
+        {
+            stride[i] = (i == dimension - 1) ? 1 : stride[i + 1] * shape[i + 1];
+            total_size *= shape[i];
+        }
+
+        if (data_vector.size() != total_size)
+        {
+            throw std::invalid_argument("Data vector size does not match tensor's total size.");
+        }
+
+        data_ = new double[total_size];
+        std::copy(data_vector.begin(), data_vector.end(), data_);
     }
 
     Tensor::Tensor(const vector<size_t> &shape, const string &dtype, vector<double> data_vector)
