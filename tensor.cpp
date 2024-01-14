@@ -97,4 +97,26 @@ namespace ts
         return stride;
     }
 
+    double Tensor::get_element(size_t index) const {
+        if (index >= total_size()) {
+            throw std::out_of_range("Index out of range");
+        }
+        return data_[index];
+    }
+
+    void Tensor::set_element(size_t index, double value) {
+        if (index >= total_size()) {
+             throw std::out_of_range("Index out of range");
+         }
+         data_[index] = value;
+    }
+
+    size_t Tensor::total_size() const {
+        size_t total = 1;
+         for (size_t dim_size : shape) {
+            total *= dim_size;
+        }
+        return total;
+     }
+
 }

@@ -27,6 +27,9 @@ namespace ts
         std::string type() const;
         double *data_ptr() const;
         std::vector<double *> data_pos; // for mutating
+        double get_element(size_t index) const;
+        void set_element(size_t index, double value);
+        size_t total_size() const;
 
         // slicing
         template <typename... Args>
@@ -315,4 +318,5 @@ namespace ts
     Tensor mean(const Tensor &t, int dim);
     Tensor max(const Tensor &t, int dim);
     Tensor min(const Tensor &t, int dim);
+    Tensor dot(const Tensor& a, const Tensor& b);
 }
