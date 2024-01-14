@@ -19,7 +19,7 @@ int main()
     // cout << "Sliced Tensor (3rd to 4th elements in the 3rd dimension):\n" << t2 << endl;
     testConstructor();
     testOperation();
-//    testConstructor();
+
     testMath();
     return 0;
 }
@@ -116,16 +116,16 @@ void testOperation()
     
     t(0) = 1;
     t(0, vector{0, 2}, 0) = vector{3.0, 2.0};
-    //here comes the problem line 120 throws an error
+    
     ts::Tensor t_tra1 = transpose(t, 0, 2);
     
     ts::Tensor t_tra2 = t.transpose(0, 2);
     
     ts::Tensor t_per1 = permute(t, {2, 0, 1});
     ts::Tensor t_per2 = t.permute({2, 0, 1});
-    ts::Tensor t_view1 = view(t, {2, 0, 1});
+    ts::Tensor t_view1 = view(t, {4, 3, 2});
     
-    ts::Tensor t_view2 = t.view({2, 0, 1});
+    ts::Tensor t_view2 = t.view({3, 4, 2});
 
     cout << "Tensor t size: ";
     for (auto s: t.size()) {

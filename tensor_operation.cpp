@@ -63,11 +63,11 @@ namespace ts {
         std::vector<size_t> new_stride;
         for (int i = 0; i < tensor.size().size(); ++i) {
             if (i == dim1) {
-                new_shape.push_back(dim2);
+                new_shape.push_back(tensor.size()[dim2]);
             } else if (i == dim2) {
-                new_shape.push_back(dim1);
+                new_shape.push_back(tensor.size()[dim1]);
             } else {
-                new_shape.push_back(i);
+                new_shape.push_back(tensor.size()[i]);
             }
         }
         for (int i = new_shape.size() - 1; i >= 0; --i) {
@@ -96,8 +96,9 @@ namespace ts {
                     fin += pos[j]*new_stride[j];
                 }
             }
-            new_data.push_back(fin);
+            new_data.push_back(tensor.data_ptr()[fin]);
         }
+        
         return Tensor(new_shape, "double", new_data);
     }
 
@@ -108,7 +109,7 @@ namespace ts {
         std::vector<size_t> new_shape;
         std::vector<size_t> new_stride;
         for (int i = 0; i < tensor.size().size(); ++i) {
-            new_shape.push_back(dims[i]);
+            new_shape.push_back(tensor.size()[dims[i]]);
         }
         for (int i = new_shape.size() - 1; i >= 0; --i) {
             int a = 1;
@@ -130,7 +131,7 @@ namespace ts {
             for (int j = 0; j < tensor.size().size(); ++j) {
                 fin += pos[dims[j]]*new_stride[j];
             }
-            new_data.push_back(fin);
+            new_data.push_back(tensor.data_ptr()[fin]);
         }
         return Tensor(new_shape, "double", new_data);
     }
