@@ -328,7 +328,7 @@ namespace ts
         return a.div(value); // Reuse the Tensor's member function for scalar addition
     }
 
-        Tensor dot(const Tensor& a, const Tensor& b) {
+    Tensor dot(const Tensor& a, const Tensor& b) {
         if (a.dimens() < 1 || b.dimens() < 1) {
             throw std::invalid_argument("Tensors must have at least 1 dimension for dot product.");
         }
@@ -350,7 +350,7 @@ namespace ts
         size_t common_dim = a.size()[a.dimens() - 1];
         
 
-        for (size_t i = 0; i < result.total_size; ++i) {
+        for (size_t i = 0; i < result.total_size(); ++i) {
             double sum = 0;
             for (size_t j = 0; j < common_dim; ++j) {
                 size_t a_index = (i / a_stride) * a_stride * common_dim + j;

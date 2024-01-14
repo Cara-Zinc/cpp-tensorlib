@@ -119,4 +119,8 @@ namespace ts
         return total;
      }
 
+    int Tensor::dimens(){
+        return dimension;
+    }
+
 }
