@@ -328,31 +328,35 @@ namespace ts
         return a.div(value); // Reuse the Tensor's member function for scalar addition
     }
 
-    Tensor dot(const Tensor& a, const Tensor& b) {
-        if (a.dimens() < 1 || b.dimens() < 1) {
+    Tensor dot(const Tensor &a, const Tensor &b)
+    {
+        if (a.dimens() < 1 || b.dimens() < 1)
+        {
             throw std::invalid_argument("Tensors must have at least 1 dimension for dot product.");
         }
 
-        if (a.size()[a.dimens() - 1] != b.size()[0]) {
-         throw std::invalid_argument("Incompatible dimensions for dot product.");
+        if (a.size()[a.dimens() - 1] != b.size()[0])
+        {
+            throw std::invalid_argument("Incompatible dimensions for dot product.");
         }
 
-        // 确定结果张量的形状
-        std::vector<size_t> result_shape(a.size().begin(), a.size().end() - 1);
+        //确定结果张量的形状
+        std::vector<size_t>result_shape(a.size().begin(), a.size().end() - 1);
         result_shape.insert(result_shape.end(), b.size().begin() + 1, b.size().end());
 
-        // 创建结果张量
+        //创建结果张量
         Tensor result(result_shape, a.type());
 
-        // 计算点积
-        size_t a_stride = a.get_stride()[a.dimens() - 2];
+        // 计算点积
+            size_t a_stride = a.get_stride()[a.dimens() - 2];
         size_t b_stride = b.get_stride()[0];
         size_t common_dim = a.size()[a.dimens() - 1];
-        
 
-        for (size_t i = 0; i < result.total_size(); ++i) {
+        for (size_t i = 0; i < result.total_size(); ++i)
+        {
             double sum = 0;
-            for (size_t j = 0; j < common_dim; ++j) {
+            for (size_t j = 0; j < common_dim; ++j)
+            {
                 size_t a_index = (i / a_stride) * a_stride * common_dim + j;
                 size_t b_index = (i % b_stride) + j * b_stride;
                 sum += a.get_element(a_index) * b.get_element(b_index);
@@ -363,4 +367,3 @@ namespace ts
         return result;
     }
 }
-
