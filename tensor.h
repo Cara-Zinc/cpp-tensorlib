@@ -30,6 +30,7 @@ namespace ts
         double get_element(size_t index) const;
         void set_element(size_t index, double value);
         size_t total_size() const;
+        int Tensor::dimens();
 
         // slicing
         template <typename... Args>
