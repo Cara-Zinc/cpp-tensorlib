@@ -106,7 +106,7 @@ namespace ts
         Tensor result(result_shape, a.type());
 
         // Iterate over elements in the broadcasted shape
-        for (size_t i = 0; i < result.totalSize(); ++i)
+        for (size_t i = 0; i < result.total_size(); ++i)
         {
             size_t idx_a = calculateBroadcastIndex(i, a.shape, a.stride);
             size_t idx_b = calculateBroadcastIndex(i, b.shape, b.stride);
@@ -139,7 +139,7 @@ namespace ts
         Tensor result(result_shape, a.type());
 
         // Iterate over elements in the broadcasted shape
-        for (size_t i = 0; i < result.totalSize(); ++i)
+        for (size_t i = 0; i < result.total_size(); ++i)
         {
             size_t idx_a = calculateBroadcastIndex(i, a.shape, a.stride);
             size_t idx_b = calculateBroadcastIndex(i, b.shape, b.stride);
@@ -172,7 +172,7 @@ namespace ts
         Tensor result(result_shape, a.type());
 
         // Iterate over elements in the broadcasted shape
-        for (size_t i = 0; i < result.totalSize(); ++i)
+        for (size_t i = 0; i < result.total_size(); ++i)
         {
             size_t idx_a = calculateBroadcastIndex(i, a.shape, a.stride);
             size_t idx_b = calculateBroadcastIndex(i, b.shape, b.stride);

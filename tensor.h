@@ -23,6 +23,7 @@ namespace ts
         Tensor(const std::vector<size_t> &shape, const std::string &dtype, std::vector<double>);
 
         std::vector<size_t> size() const;
+        std::vector<size_t> get_shape() const;
         std::vector<size_t> get_stride() const;
         std::string type() const;
         double *data_ptr() const;
@@ -30,7 +31,7 @@ namespace ts
         double get_element(size_t index) const;
         void set_element(size_t index, double value);
         size_t total_size() const;
-        int Tensor::dimens();
+        int dimens() const;
 
         // slicing
         template <typename... Args>

@@ -81,6 +81,10 @@ namespace ts
     {
         return shape;
     }
+    vector<size_t> Tensor::get_shape() const
+    {
+        return shape;
+    }
 
     string Tensor::type() const
     {
@@ -119,7 +123,7 @@ namespace ts
         return total;
      }
 
-    int Tensor::dimens(){
+    int Tensor::dimens() const{
         return dimension;
     }
 
