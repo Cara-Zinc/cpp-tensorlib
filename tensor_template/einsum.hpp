@@ -79,7 +79,7 @@ namespace ts
     {
         auto a_shape = a.get_shape();
         auto b_shape = b.get_shape();
-        if (a_shape != b_shape)
+        if (a.dimens() != b.dimens())
         {
             throw std::invalid_argument("The dimension of a and b must match.");
         }
@@ -149,13 +149,13 @@ namespace ts
 
             return outer_product(a, b);
         }
-        else if (standardized_equation == "bij,bjk->bik")
+        else if (standardized_equation == "ijk,ikl->ijl")
         {
             return batch_mul(a,b);
         }
         else if (standardized_equation == "ii->i")
         {
-            return mul(a, eye(a.get_shape()));
+            return mul(a, eye<T>(a.get_shape()));
         } 
         else
         {

@@ -345,6 +345,7 @@ namespace ts
     {
         return a.div(value); // Reuse the Tensor's member function for scalar addition
     }
+    
     template <typename T>
     Tensor<T> dot(const Tensor<T> &a, const Tensor<T> &b)
     {

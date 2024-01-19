@@ -119,9 +119,6 @@ namespace ts
 
     // // Other utility functions or global operator overloads
 
-    template <typename T>
-    Tensor<T> dot(const Tensor<T> &a, const Tensor<T> &b);
-
     template <>
     class Tensor<bool>
     {
