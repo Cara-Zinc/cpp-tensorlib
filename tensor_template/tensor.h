@@ -46,7 +46,7 @@ namespace ts
         // transpose
         Tensor<T> transpose(int dim1, int dim2);
         // permute
-        Tensor<T> permute(std::vector<int> dims);      // view
+        Tensor<T> permute(std::vector<int> dims); // view
         Tensor<T> view(std::vector<size_t> shape);
         Tensor<T> add(const Tensor<T> &other) const;
         Tensor<T> add(T value) const;
@@ -56,8 +56,20 @@ namespace ts
         Tensor<T> mul(T value) const;
         Tensor<T> div(const Tensor<T> &other) const;
         Tensor<T> div(T value) const;
+        Tensor<bool> eq(const Tensor<T> &other) const;
+        Tensor<bool> eq(T value) const;
+        Tensor<bool> ne(const Tensor<T> &other) const;
+        Tensor<bool> ne(T value) const;
+        Tensor<bool> gt(const Tensor<T> &other) const;
+        Tensor<bool> gt(T value) const;
+        Tensor<bool> ge(const Tensor<T> &other) const;
+        Tensor<bool> ge(T value) const;
+        Tensor<bool> lt(const Tensor<T> &other) const;
+        Tensor<bool> lt(T value) const;
+        Tensor<bool> le(const Tensor<T> &other) const;
+        Tensor<bool> le(T value) const;
 
-        //Tensor<bool> Tensor<T>::eq(const Tensor<T> &a, const Tensor<T> &b);
+        // Tensor<bool> Tensor<T>::eq(const Tensor<T> &a, const Tensor<T> &b);
 
         template <typename U>
         friend Tensor<U> operator+(const Tensor<U> &a, const Tensor<U> &b);
@@ -70,6 +82,24 @@ namespace ts
 
         template <typename U>
         friend Tensor<U> operator/(const Tensor<U> &a, const Tensor<U> &b);
+
+        template <typename U>
+        friend Tensor<bool> operator==(const Tensor<T> &a, const Tensor<T> &b);
+
+        template <typename U>
+        friend Tensor<bool> operator!=(const Tensor<T> &a, const Tensor<T> &b);
+
+        template <typename U>
+        friend Tensor<bool> operator>(const Tensor<T> &a, const Tensor<T> &b);
+
+        template <typename U>
+        friend Tensor<bool> operator>=(const Tensor<T> &a, const Tensor<T> &b);
+
+        template <typename U>
+        friend Tensor<bool> operator<(const Tensor<T> &a, const Tensor<T> &b);
+
+        template <typename U>
+        friend Tensor<bool> operator<=(const Tensor<T> &a, const Tensor<T> &b);
 
         // Other member functions for tensor operations, indexing, slicing, etc.
         Tensor<T> sum(int dim) const;
@@ -88,7 +118,6 @@ namespace ts
     };
 
     // // Other utility functions or global operator overloads
-    
 
     template <typename T>
     Tensor<T> dot(const Tensor<T> &a, const Tensor<T> &b);
@@ -123,8 +152,6 @@ namespace ts
         std::vector<size_t> stride;
     };
 
-    
-
 }
 
 // Include the implementation file here (e.g., in a .cpp file)
@@ -132,3 +159,4 @@ namespace ts
 #include "tensor_creation.hpp"
 #include "math_operation.hpp"
 #include "reduction_operation.hpp"
+#include "comparison_operation.hpp"

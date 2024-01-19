@@ -1,7 +1,7 @@
 #include "tensor.h"
 #include <iostream>
 #include <vector>
-#include <numeric> 
+#include <numeric>
 #include <cassert>
 using namespace ts;
 using namespace std;
@@ -9,15 +9,17 @@ void testConstructor();
 void testTemplate();
 void testOperation();
 void testMath();
+void testComparison();
 template <typename T>
 void testReduction();
 
 int main()
 {
     // testConstructor();
-    //testOperation();
+    // testOperation();
     testReduction<double>();
-    //testMath();
+    testComparison();
+    // testMath();
     return 0;
 }
 
@@ -86,7 +88,6 @@ void testOperation()
     }
     cout << endl;
 }
-
 
 void testConstructor()
 {
@@ -158,16 +159,20 @@ void testConstructor()
     }
 }
 
-template<typename T>
-void printTensorData(const Tensor<T>& tensor) {
-    for (size_t i = 0; i < tensor.total_size(); ++i) {
+template <typename T>
+void printTensorData(const Tensor<T> &tensor)
+{
+    for (size_t i = 0; i < tensor.total_size(); ++i)
+    {
         cout << tensor.data_ptr()[i] << " ";
-        if ((i + 1) % tensor.get_shape().back() == 0) cout << endl;
+        if ((i + 1) % tensor.get_shape().back() == 0)
+            cout << endl;
     }
     cout << endl;
 }
 
-void testMath() {
+void testMath()
+{
     // Create Tensors of different types
     Tensor<int> tensorInt({2, 2}, "int", vector<int>{1, 2, 3, 4});
     Tensor<float> tensorFloat({2, 2}, "float", vector<float>{1.1f, 2.2f, 3.3f, 4.4f});
@@ -203,7 +208,6 @@ void testMath() {
     return;
 }
 
-
 // Include your Tensor class definition here
 
 // Function to test the sum() function
@@ -212,9 +216,9 @@ void testReduction()
 {
     // Create a tensor with some data
     std::vector<T> testData = {1, 2, 3, 4, 5, 6, 7, 8, 9};
-    std::vector<size_t> shape = {3,3};
-    
-    ts::Tensor<T> testTensor = Tensor<T>(shape, "double",testData);
+    std::vector<size_t> shape = {3, 3};
+
+    ts::Tensor<T> testTensor = Tensor<T>(shape, "double", testData);
 
     // Test the sum() function along dimension 0
     ts::Tensor<T> result = testTensor.sum(0);
@@ -224,20 +228,20 @@ void testReduction()
     assert(result.get_shape() == expectedShape);
 
     T *resultData = result.data_ptr();
-    assert(resultData[0] == 12);  // 1 + 4 + 7
-    assert(resultData[1] == 15);  // 2 + 5 + 8
-    assert(resultData[2] == 18);  // 3 + 6 + 9
+    assert(resultData[0] == 12); // 1 + 4 + 7
+    assert(resultData[1] == 15); // 2 + 5 + 8
+    assert(resultData[2] == 18); // 3 + 6 + 9
 
     std::cout << "Test passed: sum() along dimension 0\n";
 
     std::vector<T> testData1;
-    for(int i=0;i<24;i++)
+    for (int i = 0; i < 24; i++)
     {
-        testData1.push_back(T(i+1));
+        testData1.push_back(T(i + 1));
     }
-    std::vector<size_t> shape1 = {3,2,4};
-    ts::Tensor<T> testTensor1 = Tensor<T>(shape1, "double",testData1);
-    std::cout<<testData1.size()<<" "<<shape1.size()<<std::endl;
+    std::vector<size_t> shape1 = {3, 2, 4};
+    ts::Tensor<T> testTensor1 = Tensor<T>(shape1, "double", testData1);
+    std::cout << testData1.size() << " " << shape1.size() << std::endl;
 
     ts::Tensor<T> result1 = testTensor1.mean(1);
     printTensorData(result1);
@@ -247,9 +251,67 @@ void testReduction()
 
     ts::Tensor<T> result3 = testTensor1.min(0);
     printTensorData(result3);
-
 }
 
+void testComparison()
+{
+    std::vector<int> data1 = {1, 2, 3, 4};
+    std::vector<int> data2 = {1, 2, 3, 5}; // Note the last element is different
+    ts::Tensor<int> t1({2, 2}, "int", data1);
+    ts::Tensor<int> t2({2, 2}, "int", data2);
+
+    // Define a lambda function for printing Tensor<bool>
+    auto printTensorBool = [](const ts::Tensor<bool> &tensor)
+    {
+        for (size_t i = 0; i < tensor.total_size(); ++i)
+        {
+            std::cout << (tensor.get_element(i) ? "true " : "false ");
+            if ((i + 1) % tensor.get_shape().back() == 0)
+                std::cout << std::endl;
+        }
+        std::cout << std::endl;
+    };
+
+    // Test each comparison operation
+    std::cout << "Testing eq:" << std::endl;
+    printTensorBool(t1.eq(t2));
+
+    std::cout << "Testing ne:" << std::endl;
+    printTensorBool(t1.ne(t2));
+
+    std::cout << "Testing gt:" << std::endl;
+    printTensorBool(t1.gt(t2));
+
+    std::cout << "Testing ge:" << std::endl;
+    printTensorBool(t1.ge(t2));
+
+    std::cout << "Testing lt:" << std::endl;
+    printTensorBool(t1.lt(t2));
+
+    std::cout << "Testing le:" << std::endl;
+    printTensorBool(t1.le(t2));
+
+    // Testing with a scalar value
+    int scalar = 3;
+    std::cout << "Comparing t1 with scalar " << scalar << ":" << std::endl;
+    std::cout << "eq:" << std::endl;
+    printTensorBool(t1.eq(scalar));
+
+    std::cout << "ne:" << std::endl;
+    printTensorBool(t1.ne(scalar));
+
+    std::cout << "gt:" << std::endl;
+    printTensorBool(t1.gt(scalar));
+
+    std::cout << "ge:" << std::endl;
+    printTensorBool(t1.ge(scalar));
+
+    std::cout << "lt:" << std::endl;
+    printTensorBool(t1.lt(scalar));
+
+    std::cout << "le:" << std::endl;
+    printTensorBool(t1.le(scalar));
+}
 
 void testTemplate()
 {
