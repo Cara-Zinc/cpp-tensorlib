@@ -107,7 +107,7 @@ namespace ts
         {
             throw std::out_of_range("Index out of range");
         }
-        return data_[index];
+        return data_[data_pos[index]];
     }
 
     template <typename T>
@@ -117,7 +117,8 @@ namespace ts
         {
             throw std::out_of_range("Index out of range");
         }
-        data_[index] = value;
+
+        data_[data_pos[index]] = value;
     }
     template <typename T>
     size_t Tensor<T>::total_size() const

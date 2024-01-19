@@ -19,10 +19,10 @@ int main()
     // ts::Tensor t2 = t(2, {2, 1});
     // cout << "Sliced Tensor (3rd to 4th elements in the 3rd dimension):\n" << t2 << endl;
     // testConstructor();
-    // testOperation();
+     testOperation();
 
     // testMath();
-    testDot();
+    //testDot();
     return 0;
 }
 

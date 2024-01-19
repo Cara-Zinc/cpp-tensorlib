@@ -371,7 +371,7 @@ namespace ts
             result_shape.push_back(b.size()[i]);
         }
         // 创建结果张量
-        Tensor<T> result(result_shape, a.type());
+        Tensor result(result_shape, a.type());
 
         // 计算点积
         // M = ? N = ?

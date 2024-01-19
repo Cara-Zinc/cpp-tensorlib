@@ -160,3 +160,4 @@ namespace ts
 #include "math_operation.hpp"
 #include "reduction_operation.hpp"
 #include "comparison_operation.hpp"
+#include "einsum.hpp"

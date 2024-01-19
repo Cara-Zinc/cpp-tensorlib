@@ -12,13 +12,14 @@ void testMath();
 void testComparison();
 template <typename T>
 void testReduction();
-
+void testEinsum();
 int main()
 {
     // testConstructor();
     // testOperation();
-    testReduction<double>();
-    testComparison();
+    //testReduction<double>();
+    //testComparison();
+    testEinsum();
     // testMath();
     return 0;
 }
@@ -208,6 +209,34 @@ void testMath()
     return;
 }
 
+void testEinsum(){
+    // 假设 `ts::tensor` 创建一个张量，并且 `ts::einsum` 执行给定的运算
+    std::vector<int> data1 = {1, 2, 3, 4}; // 示例数据
+    std::vector<int> data2 = {5, 6, 7, 8}; // 示例数据
+
+    ts::Tensor<int> t1 = ts::Tensor(data1);
+    ts::Tensor<int> t2 = ts::Tensor(data2);
+
+    // 计算点积
+    ts::Tensor<int> t3 = ts::einsum("i,i->", t1, t2);
+    printTensorData(t3);
+
+    // 计算逐元素乘积
+    ts::Tensor<int> t4 = ts::einsum("i,i->i", t1, t2);
+    printTensorData(t4);
+
+    // 计算t1的对角线元素
+    ts::Tensor<int> t5 = ts::einsum("ii->i", t1);
+    printTensorData(t5);
+
+    // 计算外积
+    ts::Tensor<int> t6 = ts::einsum("i,j->ij", t1, t2);
+    printTensorData(t6);
+
+    // 计算批量矩阵乘积
+    ts::Tensor<int> t7 = ts::einsum("bij,bjk->bik", t1, t2);
+    printTensorData(t7);
+}
 // Include your Tensor class definition here
 
 // Function to test the sum() function
