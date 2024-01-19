@@ -9,14 +9,14 @@ void testConstructor();
 void testTemplate();
 void testOperation();
 void testMath();
+template <typename T>
+void testReduction();
 
-// template <typename T>
-// void testReduction();
 int main()
 {
     // testConstructor();
-    testOperation();
-    //testReduction<double>();
+    //testOperation();
+    testReduction<double>();
     //testMath();
     return 0;
 }
@@ -208,26 +208,47 @@ void testMath() {
 
 // Function to test the sum() function
 template <typename T>
-// void testReduction()
-// {
-//     // Create a tensor with some data
-//     std::vector<std::vector<T>> testData = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
-//     ts::Tensor<T> testTensor(testData);
+void testReduction()
+{
+    // Create a tensor with some data
+    std::vector<T> testData = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+    std::vector<size_t> shape = {3,3};
+    
+    ts::Tensor<T> testTensor = Tensor<T>(shape, "double",testData);
 
-//     // Test the sum() function along dimension 0
-//     ts::Tensor<T> result = testTensor.sum(0);
+    // Test the sum() function along dimension 0
+    ts::Tensor<T> result = testTensor.sum(0);
 
-//     // Verify the result
-//     std::vector<size_t> expectedShape = {3};
-//     assert(result.get_shape() == expectedShape);
+    // Verify the result
+    std::vector<size_t> expectedShape = {3};
+    assert(result.get_shape() == expectedShape);
 
-//     T *resultData = result.data_ptr();
-//     assert(resultData[0] == 12);  // 1 + 4 + 7
-//     assert(resultData[1] == 15);  // 2 + 5 + 8
-//     assert(resultData[2] == 18);  // 3 + 6 + 9
+    T *resultData = result.data_ptr();
+    assert(resultData[0] == 12);  // 1 + 4 + 7
+    assert(resultData[1] == 15);  // 2 + 5 + 8
+    assert(resultData[2] == 18);  // 3 + 6 + 9
 
-//     std::cout << "Test passed: sum() along dimension 0\n";
-// }
+    std::cout << "Test passed: sum() along dimension 0\n";
+
+    std::vector<T> testData1;
+    for(int i=0;i<24;i++)
+    {
+        testData1.push_back(T(i+1));
+    }
+    std::vector<size_t> shape1 = {3,2,4};
+    ts::Tensor<T> testTensor1 = Tensor<T>(shape1, "double",testData1);
+    std::cout<<testData1.size()<<" "<<shape1.size()<<std::endl;
+
+    ts::Tensor<T> result1 = testTensor1.mean(1);
+    printTensorData(result1);
+
+    ts::Tensor<T> result2 = testTensor1.max(2);
+    printTensorData(result2);
+
+    ts::Tensor<T> result3 = testTensor1.min(0);
+    printTensorData(result3);
+
+}
 
 
 void testTemplate()

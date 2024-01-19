@@ -57,7 +57,7 @@ namespace ts
         Tensor<T> div(const Tensor<T> &other) const;
         Tensor<T> div(T value) const;
 
-        Tensor<bool> Tensor<T>::eq(const Tensor<T> &a, const Tensor<T> &b);
+        //Tensor<bool> Tensor<T>::eq(const Tensor<T> &a, const Tensor<T> &b);
 
         template <typename U>
         friend Tensor<U> operator+(const Tensor<U> &a, const Tensor<U> &b);
@@ -131,3 +131,4 @@ namespace ts
 #include "tensor_operation.hpp"
 #include "tensor_creation.hpp"
 #include "math_operation.hpp"
+#include "reduction_operation.hpp"

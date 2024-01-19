@@ -8,7 +8,7 @@
 
 namespace ts
 {
-
+    
     class Tensor;
 
     // Function to print tensor information
@@ -26,10 +26,10 @@ namespace ts
         std::vector<size_t> get_shape() const;
         std::vector<size_t> get_stride() const;
         std::string type() const;
-        double *data_ptr() const;
+        T *data_ptr() const;
         std::vector<double *> data_pos; // for mutating
-        double get_element(size_t index) const;
-        void set_element(size_t index, double value);
+        T get_element(size_t index) const;
+        void set_element(size_t index, T value);
         size_t total_size() const;
         int dimens() const;
 

@@ -64,21 +64,25 @@ namespace ts
         dimension = shape.size();
         size_t total_size = 1;
         stride.resize(dimension);
+        std::cout << "dimension: " << dimension << std::endl;
         for (int i = dimension - 1; i >= 0; --i)
         {
             stride[i] = (i == dimension - 1) ? 1 : stride[i + 1] * shape[i + 1];
             total_size *= shape[i];
+            std::cout << shape[i] << std::endl;
         }
+
         if (data_vector.size() != total_size)
         {
-            throw std::invalid_argument("Data vector size does not match tensor's total size.");
+
+            throw std::invalid_argument("1: Data vector size does not match tensor's total size.");
         }
         data_ = new T[total_size];
         std::copy(data_vector.begin(), data_vector.end(), data_);
     }
 
     template <typename T>
-    Tensor<T>::~Tensor(){}
+    Tensor<T>::~Tensor() {}
 
     // Implement other member functions...
     template <typename T>
@@ -95,7 +99,7 @@ namespace ts
 
     template <typename T>
     vector<size_t> Tensor<T>::get_stride() const { return stride; }
-    
+
     template <typename T>
     T Tensor<T>::get_element(size_t index) const
     {
@@ -105,6 +109,7 @@ namespace ts
         }
         return data_[index];
     }
+
     template <typename T>
     void Tensor<T>::set_element(size_t index, T value)
     {
@@ -176,14 +181,14 @@ namespace ts
 
         if (data_vector.size() != total_size)
         {
-            throw std::invalid_argument("Data vector size does not match tensor's total size.");
+            throw std::invalid_argument("2: Data vector size does not match tensor's total size.");
         }
 
         data_ = new bool[total_size];
         std::copy(data_vector.begin(), data_vector.end(), data_);
     }
-    Tensor<bool>::~Tensor(){}
-    
+    Tensor<bool>::~Tensor() {}
+
     vector<size_t> Tensor<bool>::size() const { return shape; }
 
     vector<size_t> Tensor<bool>::get_shape() const { return shape; }
@@ -193,7 +198,7 @@ namespace ts
     bool *Tensor<bool>::data_ptr() const { return data_; }
 
     vector<size_t> Tensor<bool>::get_stride() const { return stride; }
-    
+
     bool Tensor<bool>::get_element(size_t index) const
     {
         if (index >= total_size())
@@ -202,7 +207,7 @@ namespace ts
         }
         return data_[index];
     }
-    
+
     void Tensor<bool>::set_element(size_t index, bool value)
     {
         if (index >= total_size())
@@ -211,7 +216,7 @@ namespace ts
         }
         data_[index] = value;
     }
-    
+
     size_t Tensor<bool>::total_size() const
     {
         size_t total = 1;
@@ -221,11 +226,10 @@ namespace ts
         }
         return total;
     }
-    
+
     int Tensor<bool>::dimens() const
     {
         return dimension;
     }
 
-    
 }

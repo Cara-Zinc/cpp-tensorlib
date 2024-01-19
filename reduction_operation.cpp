@@ -33,7 +33,7 @@ namespace ts
                 new_data.push_back(tmp);
             }
         }
-        return Tensor()
+        //return Tensor()
     }
 
     Tensor Tensor::sum(int dim) const

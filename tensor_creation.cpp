@@ -1,4 +1,4 @@
-#include "Tensor.h"  // Include the provided Tensor class
+#include "tensor.h"  // Include the provided Tensor class
 #include <algorithm>
 #include <random>
 
