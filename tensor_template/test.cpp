@@ -2,18 +2,22 @@
 #include <iostream>
 #include <vector>
 #include <numeric> 
+#include <cassert>
 using namespace ts;
 using namespace std;
 void testConstructor();
 void testTemplate();
 void testOperation();
 void testMath();
-void printTensorData();
+
+// template <typename T>
+// void testReduction();
 int main()
 {
     // testConstructor();
-    // testOperation();
-    testMath();
+    testOperation();
+    //testReduction<double>();
+    //testMath();
     return 0;
 }
 
@@ -154,7 +158,6 @@ void testConstructor()
     }
 }
 
-
 template<typename T>
 void printTensorData(const Tensor<T>& tensor) {
     for (size_t i = 0; i < tensor.total_size(); ++i) {
@@ -199,6 +202,33 @@ void testMath() {
 
     return;
 }
+
+
+// Include your Tensor class definition here
+
+// Function to test the sum() function
+template <typename T>
+// void testReduction()
+// {
+//     // Create a tensor with some data
+//     std::vector<std::vector<T>> testData = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
+//     ts::Tensor<T> testTensor(testData);
+
+//     // Test the sum() function along dimension 0
+//     ts::Tensor<T> result = testTensor.sum(0);
+
+//     // Verify the result
+//     std::vector<size_t> expectedShape = {3};
+//     assert(result.get_shape() == expectedShape);
+
+//     T *resultData = result.data_ptr();
+//     assert(resultData[0] == 12);  // 1 + 4 + 7
+//     assert(resultData[1] == 15);  // 2 + 5 + 8
+//     assert(resultData[2] == 18);  // 3 + 6 + 9
+
+//     std::cout << "Test passed: sum() along dimension 0\n";
+// }
+
 
 void testTemplate()
 {
