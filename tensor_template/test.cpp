@@ -217,38 +217,78 @@ void testEinsum(){
     // 假设 `ts::tensor` 创建一个张量，并且 `ts::einsum` 执行给定的运算
     std::vector<T> testData1 = {1, 2, 3, 4, 5, 6, 7, 8, 9};
     std::vector<size_t> shape1 = {3, 3};
-    ts::Tensor<T> t1 = Tensor<T>(shape1, "double", testData1);
     std::vector<T> testData2 = {9,8,7,6,5,4,3,2,1};
-    ts::Tensor<T> t2 = Tensor<T>(shape1, "double", testData2);
-    std::vector<size_t> shape2 = {5};
-    std::vector<T> testData3 = {1,2,3,4,5};
-    ts::Tensor<T> t0 = Tensor<T>(shape2, "double", testData3);
+    std::vector<size_t> shape2 = {3};
+    std::vector<T> testData3 = {1,2,3};
     std::vector<T> testData4 = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24};
     std::vector<size_t> shape3 = {2, 3, 4};
     std::vector<size_t> shape4 = {2, 4, 2};
     std::vector<T> testData5 = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16};
-    ts::Tensor<T> a1 = Tensor<T>(shape3, "double", testData4);
-    ts::Tensor<T> a2 = Tensor<T>(shape4, "double", testData5);
+    
 
-    // 计算点积
-    ts::Tensor<T> t3 = ts::einsum("i,i->", t1, t2);
+    //1维 1*5 123
+    ts::Tensor<T> t0 = Tensor<T>(shape2, "double", testData3);
+    //2维 3*3 123456789
+    ts::Tensor<T> t1 = Tensor<T>(shape1, "double", testData1);
+    //2维 3*3 987654321
+    ts::Tensor<T> t2 = Tensor<T>(shape1, "double", testData2);
+    //3维 2*3*4 1-24
+    ts::Tensor<T> a1 = Tensor<T>(shape3, "double", testData4);
+    //3维 2*4*2 1-16
+    ts::Tensor<T> a2 = Tensor<T>(shape4, "double", testData5);
+    
+    // 1 计算t1的对角线元素
+    ts::Tensor<T> t3 = ts::einsum("ii->i", t1);
     printTensorData(t3);
 
-    // 计算逐元素乘积
-    ts::Tensor<T> t4 = ts::einsum("i,i->i", t1, t2);
-    printTensorData(t4);
+    // 2 t1转置
+   // ts::Tensor<T> t4 = ts::einsum("ij->ji", t1);
+   // printTensorData(t4);
+    
+    // 3 a1最后两个维度转置
+    //ts::Tensor<T> t5 = ts::einsum("aij->aji", a1);
+   // printTensorData(t5);
 
-    // 计算t1的对角线元素
-    ts::Tensor<T> t5 = ts::einsum("ii->i", t1);
-    printTensorData(t5);
-
-    // 计算外积
-    ts::Tensor<T> t6 = ts::einsum("i,j->ij", t0, t0);
+    // 4 对t1矩阵所有元素求和
+    cout<<"4"<<endl;
+    ts::Tensor<T> t6 = ts::einsum("ij->", t1);
     printTensorData(t6);
 
-    // 计算批量矩阵乘积
-    ts::Tensor<T> t7 = ts::einsum("bij,bjk->bik", a1, a2);
+    // 5 t1沿维度求和
+    cout<<"5"<<endl;
+    ts::Tensor<T> t7 = ts::einsum("ij->j", t1);
     printTensorData(t7);
+
+    // 6 t1 t0矩阵和向量乘法
+    cout<<"6"<<endl;
+    ts::Tensor<T> t8 = ts::einsum("ik, k->i", t1, t0);
+    printTensorData(t8);
+
+    // 7 t1 t2矩阵和矩阵乘法
+    cout<<"7"<<endl;
+    ts::Tensor<T> t9 = ts::einsum("ik, kj->ij", t1, t2);
+    printTensorData(t9);
+
+    // 8 t1 t2点积
+    cout<<"8"<<endl;
+    ts::Tensor<T> t10 = ts::einsum("i,i->", t1, t2);
+    printTensorData(t10);
+
+    // 9 t1 t2逐元素乘法再求和
+    cout<<"9"<<endl;
+    ts::Tensor<T> t11 = ts::einsum("ij,ij->", t1, t2);
+    printTensorData(t11);
+
+    // 10  t0 t0外积
+    cout<<"10"<<endl;
+    ts::Tensor<T> t12 = ts::einsum("i,j->ij", t0, t0);
+    printTensorData(t12);
+
+    // 11 a1 a2批量矩阵乘法
+    cout<<"11"<<endl;
+    ts::Tensor<T> t13 = ts::einsum("bij,bjk->bik", a1, a2);
+    printTensorData(t13);
+
 }
 // Include your Tensor class definition here
 

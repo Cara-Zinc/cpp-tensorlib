@@ -2,8 +2,69 @@
 #define EINSUM_HPP
 #include "tensor.h"
 
+//  1) Extracting elements along diagonal, ‘ii->i’ , //
+//  2) Transpose, ‘ij->ji’,
+//  3) Permuate, ‘…ij->…ji’ ,
+// 4) Reduce sum, ‘ij->’,
+// 5) Sum along dimension, ‘ij->j’ ,
+// 6) Matrix and vector mul, ‘ik, k->i’,
+// 7) Matrix mul, ‘ik, kj->ij’ ,
+// 8) Dot product, ‘i,i->’ , //
+// 9) Pointwise mul and reduce sum, ‘ij,ij->’ ,
+// 10) Outer product, ‘i,j->ij’ , //
+// 11) Batch matrix mul, ‘ijk,ikl->ijl’ , //
+// 12) Tensor contraction, ‘pqrs,tuqvr->pstuv’ ,
+// 13) Bilinear transformation, ‘ik,jkl->ij’
 namespace ts
-{
+{ // 该方法用于判断->符号并确保equation输入为‘…ij->…ji’形式
+    inline bool is_permute_last_two_dims(const std::string &equation)
+    {
+        // 找到 '->' 分隔符
+        auto arrow_pos = equation.find("->");
+        if (arrow_pos == std::string::npos)
+        {
+            return false; // 没有找到分隔符
+        }
+
+        // 提取输入和输出部分
+        std::string input_part = equation.substr(0, arrow_pos);
+        std::string output_part = equation.substr(arrow_pos + 2);
+
+        // 检查输入和输出部分的长度
+        if (input_part.size() < 2 || output_part.size() < 2)
+        {
+            return false; // 输入或输出部分长度小于2，不符合排列操作的模式
+        }
+
+        // 检查除最后两个字符外，其他字符是否一致
+        if (input_part.substr(0, input_part.size() - 2) != output_part.substr(0, output_part.size() - 2))
+        {
+            return false; // 除最后两个维度外，其他维度不匹配
+        }
+
+        // 检查最后两个字符是否交换
+        return input_part[input_part.size() - 2] == output_part[output_part.size() - 1] &&
+               input_part[input_part.size() - 1] == output_part[output_part.size() - 2];
+    }
+
+    template <typename T>
+    inline T elementwise_mul_sum(const Tensor<T> &a, const Tensor<T> &b)
+    {
+        if (a.get_shape() != b.get_shape())
+        {
+            throw std::invalid_argument("Shapes of a and b must be the same for elementwise multiplication.");
+        }
+
+        T sum = 0;
+        size_t total_elements = a.total_size();
+        for (size_t i = 0; i < total_elements; ++i)
+        {
+            sum += a.get_element(i) * b.get_element(i);
+        }
+
+        return sum;
+    }
+
     inline std::string standardize_einsum_notation(const std::string &equation)
     {
         std::unordered_map<char, char> index_map;
@@ -132,31 +193,106 @@ namespace ts
     }
 
     template <typename T>
+    T reduce_sum(const Tensor<T> &tensor)
+    {
+        T sum = 0;
+        size_t total_size = tensor.total_size();
+
+        for (size_t i = 0; i < total_size; ++i)
+        {
+            sum += tensor.get_element(i);
+        }
+
+        return sum;
+    }
+
+    template <typename T>
     Tensor<T> einsum(const std::string &equation, const Tensor<T> &a, const Tensor<T> &b = Tensor<T>())
     {
         // First, standardize the einsum notation
         std::string standardized_equation = standardize_einsum_notation(equation);
+        // 8，点积
         if (standardized_equation == "i,i->")
         {
             return dot(a, b);
         }
-        else if (standardized_equation == "i,i->i")
+        // 9 逐元素乘法再求和
+        else if (standardized_equation == "ij,ij->")
         {
-            return mul(a, b);
+            T sum = elementwise_mul_sum(a, b);
+            return Tensor<T>({1}, a.type(), {sum});
         }
+        // 10  外积
         else if (standardized_equation == "i,j->ij")
         {
 
             return outer_product(a, b);
         }
+        // 11 批量矩阵乘法
         else if (standardized_equation == "ijk,ikl->ijl")
         {
-            return batch_mul(a,b);
+            return batch_mul(a, b);
         }
+        // 1 对角线提取
         else if (standardized_equation == "ii->i")
         {
             return mul(a, eye<T>(a.get_shape()));
-        } 
+        }
+        // 2 转置
+        else if (standardized_equation == "ij->ji")
+        {
+            if (a.dimens() != 2)
+            {
+                throw std::invalid_argument("The dimension for transposing must be 2");
+            }
+            return transpose(a, 0, 1);
+        }
+        // 3 最后两个维度转置
+        else if (is_permute_last_two_dims(standardized_equation) == true)
+        {
+            if (a.dimens() < 2)
+            {
+                throw std::invalid_argument("The dimension for transposing must be bigger than 2");
+            }
+            return transpose(a, a.dimens() - 2, a.dimens() - 1);
+        }
+        // 4 对矩阵所有元素求和
+        else if (standardized_equation == "ij->")
+        {
+            T sum = reduce_sum(a);
+            return Tensor<T>({1}, a.type(), {sum});
+        }
+        // 5 沿维度求和
+        else if (standardized_equation == "ij->j")
+        {
+            if (a.dimens() != 2)
+            {
+                throw std::invalid_argument("The dimension for transposing must be 2");
+            }
+            return sum(a, 0);
+        }
+        // 6 矩阵和向量乘法
+        else if (standardized_equation == "ij, j->i")
+        {
+            if (a.dimens() != 2)
+            {
+                throw std::invalid_argument("a is not a 2_dimension tensor");
+            }
+            if (b.dimens() != 1)
+            {
+                throw std::invalid_argument("b is not a 1_dimension scaler");
+            }
+            return dot(a, b);
+        }
+        // 7 矩阵和矩阵乘法
+        else if (standardized_equation == "ij, jk->ik")
+        {
+            if (a.dimens() != 2 || b.dimens() != 2)
+            {
+                throw std::invalid_argument("a or b is not a 2_dimension matrix");
+            }
+            return dot(a, b);
+        }
         else
         {
             throw std::invalid_argument("There is no such einsum operation");
